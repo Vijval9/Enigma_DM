@@ -71,6 +71,25 @@ class Rotor():
             else:
                 self.og_list[i] = st
         self.roffset+=1
+
+    def shift_initial(self):
+        st_b = self.face_b[0]
+        st_a = self.face_a[0]
+        
+        for i in range(0,len(self.face_a)):
+            
+            if i!=len(self.face_a)-1:
+               self.face_b[i] = self.face_b[i+1]
+               self.face_a[i] = self.face_a[i+1]
+            
+            else:
+                self.face_b[i] = st_b
+                self.face_a[i] = st_a
+                
+        self.offset+=1
+        self.now=1
+
+
         
         
 
@@ -118,10 +137,10 @@ class Enigma():
            s = self.plg.map_u_to_l(s)
         self.r1.shift()
         a = self.r1.map_a_to_b2(s)
-        if(self.r1.offset%26==self.r1.notch):
+        if(self.r1.offset%26==self.r1.notch and self.r1.now==0):
             self.r2.shift()
         b = self.r2.map_a_to_b2(a)
-        if(self.r2.offset%26==self.r2.notch):
+        if(self.r2.offset%26==self.r2.notch and self.r2.now==0):
             self.r3.shift()
         c = self.r3.map_a_to_b2(b)
         d = self.ref.map_a_to_b(c)
