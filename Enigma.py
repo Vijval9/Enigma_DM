@@ -196,19 +196,12 @@ r3 = rl[s[2]-1]
 og = list("abcdefghijklmnopqrstuvwxyz")
 rotors = [r1,r2,r3]
 
-print("Enter Rotor Settings: ")           # FIX THIS
+print("Enter Rotor Settings: ")           
 s = list(input())
 for i in range(len(s)):
     j = og.index(s[i])
     for x in range(j):
         rotors[i].shift()
-        '''if(i!=0):
-            if(rotors[i].offset%26==rotors[i].notch):
-                rotors[i-1].shift()
-                if(i==2):
-                    if(rotors[i-1].offset%26==rotors[i-1].notch):
-                        rotors[i-2].shift()'''
-
 
 
 print("Enter ring settings: ")            # FIX THIS
