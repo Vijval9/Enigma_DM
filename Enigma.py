@@ -37,29 +37,12 @@ class Rotor():
         self.notch = n
         self.roffset=0
         
-    def map_a_to_b(self, x):
-        #print(self.og_list.index(x))
-        #print(self.face_b)
-        return self.og_list[(self.og_list.index(self.face_b[(self.face_a.index(x)+self.offset)%len(self.face_a)])-self.offset)%len(self.face_a)]
-    
-    def map_b_to_a(self, x):
-        #return self.face_a[self.face_b.index(x)]
-        x = self.face_a[self.og_list.index(x)]
-        return self.og_list[(self.og_list.index(self.face_a[(self.og_list.index(x)+self.offset)%len(self.face_b)]) - self.offset)%len(self.face_a)]
-        #return self.face_a[]
-        
     def map_a_to_b2(self, x):
         x = self.face_a[self.og_list.index(x)]
         return self.og_list[(self.og_list.index(self.face_b[self.face_a.index(x)])-self.offset+self.roffset)%26]
     
     def map_b_to_a2(self, x):
         return self.og_list[(self.og_list.index(self.face_a[self.face_b.index(self.og_list[(self.og_list.index(x)+self.offset-self.roffset)%26])])-self.offset+self.roffset)%26]
-           
-    def transform_forward(self, x):
-        return self.og_list[self.face_a.index(x)]
-    
-    def transform_backward(self, x):
-        return self.og_list[self.face_a.index(x)]
     
     def shift(self):
         st_b = self.face_b[0]
@@ -89,25 +72,7 @@ class Rotor():
                 self.og_list[i] = st
         self.roffset+=1
         
-    def shift_initial(self):
-        st_b = self.face_b[0]
-        st_a = self.face_a[0]
         
-        for i in range(0,len(self.face_a)):
-            
-            if i!=len(self.face_a)-1:
-               self.face_b[i] = self.face_b[i+1]
-               self.face_a[i] = self.face_a[i+1]
-            
-            else:
-                self.face_b[i] = st_b
-                self.face_a[i] = st_a
-                
-        self.offset+=1
-        
-        
-        
-
 
 class Reflector():
     
@@ -151,27 +116,18 @@ class Enigma():
     def encrypt_letter(self,s):
         if s in self.plg.up:
            s = self.plg.map_u_to_l(s)
-        #if(self.r1.offset%26==self.r1.notch):
-         #   self.r2.shift()
         self.r1.shift()
         a = self.r1.map_a_to_b2(s)
-        #print("wheel3: ",a)
         if(self.r1.offset%26==self.r1.notch):
             self.r2.shift()
         b = self.r2.map_a_to_b2(a)
-        #print("wheel2: ",b)
         if(self.r2.offset%26==self.r2.notch):
             self.r3.shift()
         c = self.r3.map_a_to_b2(b)
-        #print("wheel1: ",c)
         d = self.ref.map_a_to_b(c)
-        #print(d)
         a = self.r3.map_b_to_a2(d)
-        #print(a)
         a1 = self.r2.map_b_to_a2(a)
-        #print(a1)
         a = self.r1.map_b_to_a2(a1)
-        #print(a)
         if a in self.plg.low:
             a = self.plg.map_l_to_u(a)
         
@@ -233,12 +189,6 @@ for i in range(len(s)):
                 if(i==2):
                     if(rotors[i-1].offset%26==rotors[i-1].notch):
                         rotors[i-2].shift()'''
-
-                        
-print("rotor1: ",r1.face_a)
-print("rotor2: ",r2.face_a)
-print("rotor3: ",r3.face_a)
-print(r3.face_b)
 
 
 
