@@ -282,30 +282,3 @@ else:
     print("Decrypted message: ")
     print(EnigmaMachine.encrypt_text(s))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        
-        
-        
-
-
-    
-
-
-    
