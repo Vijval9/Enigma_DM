@@ -1,33 +1,28 @@
-import random
+# Some basic Initializations
 
-s = "abcdefghijklmnopqrstuvwxyz"
-s2 = "BDFHJLCPRTXVZNYEIWGAKMUSQO"
-s2.lower()
-rotor3_a = list(s)
-rotor3_b = list(s2.lower())
-s4 = "AJDKSIRUXBLHWTMCQGZNPYFVOE"
-rotor2_a = list(s)
-rotor2_b = list(s4.lower())
-s5 = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
-rotor1_a = list(s)
-rotor1_b = list(s5.lower())
-s6 = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
-reflector_a = list(s)
-reflector_b = list(s6.lower())
-rotor4_a = list(s)
-s7 = "ESOVPZJAYQUIRHXLNFTGKDCMWB"
-rotor4_b = list(s7.lower())
-rotor5_a = list(s)
-s8 = "VZBRGITYUPSDNHLXAWMJQOFECK"
-rotor5_b = list(s8.lower())
+l = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+rotor3_a = l
+rotor3_b = ['b', 'd', 'f', 'h', 'j', 'l', 'c', 'p', 'r', 't', 'x', 'v', 'z', 'n', 'y', 'e', 'i', 'w', 'g', 'a', 'k', 'm', 'u', 's', 'q', 'o']
+rotor2_a = l
+rotor2_b = ['a', 'j', 'd', 'k', 's', 'i', 'r', 'u', 'x', 'b', 'l', 'h', 'w', 't', 'm', 'c', 'q', 'g', 'z', 'n', 'p', 'y', 'f', 'v', 'o', 'e']
+rotor1_a = l
+rotor1_b = ['e', 'k', 'm', 'f', 'l', 'g', 'd', 'q', 'v', 'z', 'n', 't', 'o', 'w', 'y', 'h', 'x', 'u', 's', 'p', 'a', 'i', 'b', 'r', 'c', 'j']
+rotor4_a = l
+rotor4_b = ['e', 's', 'o', 'v', 'p', 'z', 'j', 'a', 'y', 'q', 'u', 'i', 'r', 'h', 'x', 'l', 'n', 'f', 't', 'g', 'k', 'd', 'c', 'm', 'w', 'b']
+rotor5_a = l
+rotor5_b = ['v', 'z', 'b', 'r', 'g', 'i', 't', 'y', 'u', 'p', 's', 'd', 'n', 'h', 'l', 'x', 'a', 'w', 'm', 'j', 'q', 'o', 'f', 'e', 'c', 'k']
+reflector_a = l
+reflector_b = ['y', 'r', 'u', 'h', 'q', 's', 'l', 'd', 'p', 'x', 'n', 'g', 'o', 'k', 'm', 'i', 'e', 'b', 'f', 'z', 'c', 'w', 'v', 'j', 'a', 't']
 
 
+_______________________________________________________________________________________________________________________________________________________
+=======================================================================================================================================================
 
-##################################################################################################################################
 
+# Creating the Required Classes
 
 class Rotor():
-    
+
     og_list = list("abcdefghijklmnopqrstuvwxyz")
     
     def __init__(self, a, b, n):
@@ -37,8 +32,7 @@ class Rotor():
         self.notch = n
         self.roffset=0
         self.now = 0
-        
-        
+            
     def map_a_to_b2(self, x):
         x = self.face_a[(self.og_list.index(x)-self.roffset)%26]
         return self.og_list[(self.og_list.index(self.face_b[self.face_a.index(x)])-self.offset+self.roffset)%26]
@@ -46,7 +40,6 @@ class Rotor():
     def map_b_to_a2(self, x):
         return self.og_list[(self.og_list.index(self.face_a[self.face_b.index(self.og_list[(self.og_list.index(x)+self.offset-self.roffset)%26])])-self.offset+self.roffset)%26]
         
-    
     def shift(self):
         st_b = self.face_b[0]
         st_a = self.face_a[0]
@@ -86,8 +79,6 @@ class Rotor():
         
         
         
-
-
 class Reflector():
     
     def __init__(self, a, b):
@@ -100,6 +91,7 @@ class Reflector():
     def map_b_to_a(self, x):
         return self.face_a[self.face_b.index(x)]
     
+
 
 class PlugBoard():
     
@@ -115,9 +107,7 @@ class PlugBoard():
 
 
 
-
 class Enigma():
-    
     
     def __init__(self, r3, r2, r1, ref, plgb):
         self.r1 = r1
@@ -128,7 +118,6 @@ class Enigma():
         
     
     def encrypt_letter(self,s):
-
         s1 =s
         if s in self.plg.up:
            s1 = self.plg.map_u_to_l(s)
@@ -186,10 +175,12 @@ class Enigma():
                 
         return final
                 
-    
-    
-##################################################################################################################################
 
+________________________________________________________________________________________________________________________________________________
+*************************************************************************************************************************************************
+
+
+# Starting the Main Implementation
 
 Rotor5 = Rotor(rotor5_a,rotor5_b, 26)
 Rotor4 = Rotor(rotor4_a,rotor4_b, 10)
@@ -197,39 +188,33 @@ Rotor3 = Rotor(rotor3_a,rotor3_b, 22)
 Rotor2 = Rotor(rotor2_a,rotor2_b, 5)
 Rotor1 = Rotor(rotor1_a,rotor1_b, 17)
 ReflectorB = Reflector(reflector_a,reflector_b)
-Plugboard = PlugBoard(list(s),list(s))
+Plugboard = PlugBoard(l,l)
 
 print("Enter rotor order from left to right: ")
 s = list(map(int,input()))
 rl = [Rotor1,Rotor2,Rotor3,Rotor4,Rotor5]
-    
-
 r1 = rl[s[0]-1]
 r2 = rl[s[1]-1]
 r3 = rl[s[2]-1]
 og = list("abcdefghijklmnopqrstuvwxyz")
 rotors = [r1,r2,r3]
 
-print("Enter Rotor Settings: ")           # FIX THIS
+print("Enter Rotor Settings: ")           
 s = list(input())
 for i in range(len(s)):
     j = og.index(s[i])
     for x in range(j):
         rotors[i].shift_initial()
 
-
-print("Enter ring settings: ")            # FIX THIS
+print("Enter ring settings: ")            
 s = list(input())
-
 for i in range(len(s)):
     j = og.index(s[i])
     for x in range(j):
         rotors[i].shift_ring()
 
-
 print("Enter plugboard configuration as pairs of letters. Press nop if do not want plugboard: ")
 s= input()
-
 if s.lower()!="nop":
     l = s.split()
     pu = [x[0] for x in l]
@@ -239,7 +224,6 @@ if s.lower()!="nop":
 
 EnigmaMachine = Enigma(r1,r2,r3,ReflectorB,Plugboard)
 print("Enigma Machine initialised...")
-
 print("Choose: ")
 print("1. Encrypt")
 print("2. Decrypt")
