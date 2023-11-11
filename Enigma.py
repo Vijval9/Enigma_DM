@@ -38,7 +38,7 @@ class Rotor():
         self.roffset=0
         
     def map_a_to_b2(self, x):
-        x = self.face_a[self.og_list.index(x)]
+        x = self.face_a[(self.og_list.index(x)-self.roffset)%26]
         return self.og_list[(self.og_list.index(self.face_b[self.face_a.index(x)])-self.offset+self.roffset)%26]
     
     def map_b_to_a2(self, x):
@@ -61,15 +61,6 @@ class Rotor():
         self.offset+=1
         
     def shift_ring(self):
-        st = self.og_list[0]
-        for i in range(0,len(self.og_list)):
-            
-            if i!=len(self.og_list)-1:
-               self.og_list[i] = self.og_list[i+1]
-
-            
-            else:
-                self.og_list[i] = st
         self.roffset+=1
 
     def shift_initial(self):
