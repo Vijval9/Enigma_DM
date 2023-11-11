@@ -36,6 +36,8 @@ class Rotor():
         self.offset = 0
         self.notch = n
         self.roffset=0
+        self.now = 0
+        
         
     def map_a_to_b2(self, x):
         x = self.face_a[(self.og_list.index(x)-self.roffset)%26]
@@ -43,6 +45,7 @@ class Rotor():
     
     def map_b_to_a2(self, x):
         return self.og_list[(self.og_list.index(self.face_a[self.face_b.index(self.og_list[(self.og_list.index(x)+self.offset-self.roffset)%26])])-self.offset+self.roffset)%26]
+        
     
     def shift(self):
         st_b = self.face_b[0]
@@ -63,7 +66,7 @@ class Rotor():
         
     def shift_ring(self):
         self.roffset+=1
-
+        
     def shift_initial(self):
         st_b = self.face_b[0]
         st_a = self.face_a[0]
@@ -80,10 +83,10 @@ class Rotor():
                 
         self.offset+=1
         self.now=1
-
-
         
         
+        
+
 
 class Reflector():
     
@@ -125,15 +128,29 @@ class Enigma():
         
     
     def encrypt_letter(self,s):
+
+        s1 =s
         if s in self.plg.up:
-           s = self.plg.map_u_to_l(s)
+           s1 = self.plg.map_u_to_l(s)
+        elif s in self.plg.low:
+            s1 = self.plg.map_l_to_u(s)
         self.r1.shift()
-        a = self.r1.map_a_to_b2(s)
-        if(self.r1.offset%26==self.r1.notch or self.r1.offset%26==self.r2.notch):
+        a = self.r1.map_a_to_b2(s1)
+        if(self.r1.notch==26):
+            if(((self.r1.offset)==self.r1.notch or self.r2.offset%26 == self.r2.notch-1)) : 
+                self.r2.shift()
+                self.r2.now=2
+                self.r1.now=3
+        elif((self.r1.offset)%26==self.r1.notch or self.r2.offset%26 == self.r2.notch-1) :
             self.r2.shift()
             self.r2.now=2
+            self.r1.now=3
         b = self.r2.map_a_to_b2(a)
-        if((self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r3.notch) and self.r2.now!=3):
+        if(self.r2.notch==26):
+            if(((self.r2.offset)%26==self.r2.notch or (self.r3.offset%26==self.r3.notch-1)) and self.r2.now!=3) :
+                self.r3.shift()
+                self.r2.now=3
+        elif (((self.r2.offset)%26==self.r2.notch or (self.r3.offset%26==self.r3.notch-1)) and self.r2.now!=3) :#and self.r2.now==0):
             self.r3.shift()
             self.r2.now=3
         c = self.r3.map_a_to_b2(b)
@@ -141,10 +158,13 @@ class Enigma():
         a = self.r3.map_b_to_a2(d)
         a1 = self.r2.map_b_to_a2(a)
         a = self.r1.map_b_to_a2(a1)
-        if a in self.plg.low:
-            a = self.plg.map_l_to_u(a)
+        a1 =a
+        if a in self.plg.up:
+            a1 = self.plg.map_u_to_l(a)
+        elif a in self.plg.low:
+            a1 = self.plg.map_l_to_u(a)
         
-        return a
+        return a1
     
     def encrypt_string(self, s):
         l = list(s)
@@ -190,12 +210,12 @@ r3 = rl[s[2]-1]
 og = list("abcdefghijklmnopqrstuvwxyz")
 rotors = [r1,r2,r3]
 
-print("Enter Rotor Settings: ")           
+print("Enter Rotor Settings: ")           # FIX THIS
 s = list(input())
 for i in range(len(s)):
     j = og.index(s[i])
     for x in range(j):
-        rotors[i].shift()
+        rotors[i].shift_initial()
 
 
 print("Enter ring settings: ")            # FIX THIS
@@ -237,4 +257,6 @@ else:
     print("Decrypting...")
     print("Decrypted message: ")
     print(EnigmaMachine.encrypt_text(s))
+
+
 
