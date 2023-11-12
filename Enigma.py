@@ -125,7 +125,7 @@ class Enigma():
             s1 = self.plg.map_l_to_u(s)
         self.r1.shift()
         a = self.r1.map_a_to_b2(s1)
-        if(self.r1.notch==26):
+        if(self.r1.notch==26 and self.r1.offset!=0):
             if(((self.r1.offset)%self.r1.notch==0 or self.r2.offset%26 == self.r2.notch-1)) : 
                 self.r2.shift()
                 self.r2.now=2
@@ -135,7 +135,7 @@ class Enigma():
             self.r2.now=2
             self.r1.now=3
         b = self.r2.map_a_to_b2(a)
-        if(self.r2.notch==26):
+        if(self.r2.notch==26 and self.r2.offset!=0):
             if(((self.r2.offset)%self.r2.notch==0 or (self.r3.offset%26==self.r3.notch-1)) and self.r2.now!=3) :
                 self.r3.shift()
                 self.r2.now=3
