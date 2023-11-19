@@ -11,6 +11,8 @@ To verify encryption and decryption, two external simulators can be used:
 a) [Cryptii Enigma Machine Simulator](https://cryptii.com/pipes/enigma-machine)
 b) [CacheSleuth Enigma Simulator](https://www.cachesleuth.com/enigma.html)
 
+Please note that in these simulators, the "Rotor 1" is the leftmost rotor.
+
 *ENIGMA:*
 
 For the Enigma simulation, we created four classes:
