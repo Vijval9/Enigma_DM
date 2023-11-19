@@ -2,6 +2,7 @@
 
 import copy
 
+
 l = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 rotor3_a = l.copy()
 rotor3_b = ['b', 'd', 'f', 'h', 'j', 'l', 'c', 'p', 'r', 't', 'x', 'v', 'z', 'n', 'y', 'e', 'i', 'w', 'g', 'a', 'k', 'm', 'u', 's', 'q', 'o']
@@ -184,12 +185,6 @@ class Enigma():
                 
         return final
     
-class node():
-    
-    def __init__(self):
-        letter = ""
-        l = []
-        v = 0
         
 def match(s,t):
     fl=0
@@ -247,9 +242,11 @@ Plugboard = PlugBoard(l.copy(),l.copy())
 
 print("Bombe initialised...")
 
-ct = input("Enter text to be fed: ")
-cr = input("Enter hint: ")
+ct = input("Enter text to be fed: ").lower()
+cr = input("Enter hint: ").lower()
 mm=0
+
+dictofkeys = {}
 
 
 while(mm==0):
@@ -257,7 +254,7 @@ while(mm==0):
 
 
     print("Enter rotor order from left to right: ")
-    ss = list(map(int,input()))
+    ss = list(map(int,input().split()))
     rl = [copy.deepcopy(Rotor1),copy.deepcopy(Rotor2),copy.deepcopy(Rotor3),copy.deepcopy(Rotor4),copy.deepcopy(Rotor5),copy.deepcopy(Rotor6),copy.deepcopy(Rotor7),copy.deepcopy(Rotor8)]
         
 
@@ -266,46 +263,11 @@ while(mm==0):
     r3 = rl[ss[2]-1]
     og = list("abcdefghijklmnopqrstuvwxyz")
     rotors = [copy.deepcopy(r1),copy.deepcopy(r2),copy.deepcopy(r3)]
-    '''
-    print("Enter Rotor Settings: ")           
-    s = list(input())
-    for i in range(len(s)):
-        j = og.index(s[i])
-        for x in range(j):
-            rotors[i].shift_initial()
 
-
-    print("Enter ring settings: ")           
-    s = list(input())
-    for i in range(len(s)):
-        j = og.index(s[i])
-        for x in range(j):
-            rotors[i].shift_ring()
-
-
-    print("Enter plugboard configuration as pairs of letters. Press nop if do not want plugboard: ")
-    s= input()
-    if s.lower()!="nop":
-        l = s.split()
-        pu = [x[0] for x in l]
-        pl = [x[1] for x in l]
-        Plugboard = PlugBoard(pu,pl)
-        
-        
-
-    EnigmaMachine = Enigma(r1,r2,r3,ReflectorB,Plugboard)'''
     rotors = [copy.deepcopy(r1),copy.deepcopy(r2),copy.deepcopy(r3)]
     EnigmaMachine = Enigma(rotors[0],rotors[1],rotors[2],ReflectorB,Plugboard)
 
-        
-
-
     start = crib(ct,cr)
-    #ct = ct[start:start+len(cr)]
-    #print(start)
-        
-
-
 
     matc=0
     s=["a","a","a"]
@@ -343,24 +305,40 @@ while(mm==0):
                     sss = EnigmaMachine.encrypt_text(ct[i:i+len(cr)])
                     #print("guess: ",sss)
                     if(sss==cr):
-                       xy=1
-                       break
+                       st = ""
+                       for i in ss:
+                           st+=str(i)
+                       dictofkeys[st] = s
+                       print("one key found: ",s)
+                       search = input("continue to search ? [y/n]: ")
+                       if((a==25 and b==25 and c==25) or search=="n"):
+                           xy=1
+                           break
                 if(xy==1):
-                    bb=1
-                    break
+                    if((a==25 and b==25 and c==25) or search=="n"):
+                        bb=1
+                        break
             if(bb==1):
-                aa=1
-                break
+                if((a==25 and b==25 and c==25) or search=="n"):
+                    aa=1
+                    break
         if aa==1:
-            matc=1
-            break
-    if(matc==1):
+            if((a==25 and b==25 and c==25) or search=="n"):
+                matc=1
+                break
+    if((matc==1 and a==25 and b==25 and c==25) or search=="n"):
         mm=1
         print("Cracked.")
         print("rotor settings: ",s)
         print("Rotor order: ",ss[0],ss[1],ss[2])
+        break
     else:
-        print("Incorrect guess of rotors")
+        print("No more solutions")
+
+print("Final possible solutions : ")
+for i in dictofkeys:
+    print(f"{i} : {dictofkeys[i]}")
 
 
-    
+        
+
