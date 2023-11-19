@@ -17,12 +17,6 @@ rotor4_a = l.copy()
 rotor4_b = ['e', 's', 'o', 'v', 'p', 'z', 'j', 'a', 'y', 'q', 'u', 'i', 'r', 'h', 'x', 'l', 'n', 'f', 't', 'g', 'k', 'd', 'c', 'm', 'w', 'b']
 rotor5_a = l.copy()
 rotor5_b = ['v', 'z', 'b', 'r', 'g', 'i', 't', 'y', 'u', 'p', 's', 'd', 'n', 'h', 'l', 'x', 'a', 'w', 'm', 'j', 'q', 'o', 'f', 'e', 'c', 'k']
-rotor6_a = l.copy()
-rotor6_b = ['j', 'p', 'g', 'v', 'o', 'u', 'm', 'f', 'y', 'q', 'b', 'e', 'n', 'h', 'z', 'r', 'd', 'k', 'a', 's', 'x', 'l', 'i', 'c', 't', 'w']
-rotor7_a = l.copy()
-rotor7_b = ['n', 'z', 'j', 'h', 'g', 'r', 'c', 'x', 'm', 'y', 's', 'w', 'b', 'o', 'u', 'f', 'a', 'i', 'v', 'l', 'p', 'e', 'k', 'q', 'd', 't']
-rotor8_a = l.copy()
-rotor8_b = ['f', 'k', 'q', 'h', 't', 'l', 'x', 'o', 'c', 'b', 'j', 's', 'p', 'd', 'z', 'r', 'a', 'm', 'e', 'w', 'n', 'i', 'u', 'y', 'g', 'v']
 reflector_a = l.copy()
 reflector_b = ['y', 'r', 'u', 'h', 'q', 's', 'l', 'd', 'p', 'x', 'n', 'g', 'o', 'k', 'm', 'i', 'e', 'b', 'f', 'z', 'c', 'w', 'v', 'j', 'a', 't']
 ref_b = ['y', 'r', 'u', 'h', 'q', 's', 'l', 'd', 'p', 'x', 'n', 'g', 'o', 'k', 'm', 'i', 'e', 'b', 'f', 'z', 'c', 'w', 'v', 'j', 'a', 't']
@@ -36,12 +30,11 @@ class Rotor():
     
     og_list = list("abcdefghijklmnopqrstuvwxyz")
     
-    def __init__(self, a, b, n, m):
+    def __init__(self, a, b, n):
         self.face_a = a
         self.face_b = b
         self.offset = 0
         self.notch = n
-        self.notch2 = m
         self.roffset=0
         self.now = 0
         
@@ -136,23 +129,25 @@ class Enigma():
         self.r1.shift()
         a = self.r1.map_a_to_b2(s1)
         if(self.r1.notch==26 and self.r1.offset!=0):
-            if(((self.r1.offset)%self.r1.notch==0 or self.r1.offset%26==self.r1.notch2 or self.r2.offset%26 == self.r2.notch-1 or self.r2.offset%26 == self.r2.notch2-1)) : #(self.r1.offset%26==self.r2.notch) ):# and self.r1.now!=3: #and self.r1.now==0)
+            if(((self.r1.offset)%self.r1.notch==0 or self.r2.offset%26 == self.r2.notch-1)) : #(self.r1.offset%26==self.r2.notch) ):# and self.r1.now!=3: #and self.r1.now==0)
                 self.r2.shift()
                 self.r2.now=2
                 self.r1.now=3
-        elif((self.r1.offset)%26==self.r1.notch or self.r1.offset%26==self.r1.notch2 or self.r2.offset%26 == self.r2.notch-1 or self.r2.offset%26 == self.r2.notch2-1) : #(self.r1.offset%26==self.r2.notch) ):# and self.r1.now!=3: #and self.r1.now==0)
+        elif((self.r1.offset)%26==self.r1.notch or self.r2.offset%26 == self.r2.notch-1) : #(self.r1.offset%26==self.r2.notch) ):# and self.r1.now!=3: #and self.r1.now==0)
             self.r2.shift()
+            
             self.r2.now=2
             self.r1.now=3
     
         b = self.r2.map_a_to_b2(a)
         if(self.r2.notch==26 and self.r2.offset!=0):
-            if((self.r2.offset)%self.r2.notch==0 or self.r2.offset%26==self.r2.notch2 or (self.r3.offset%26==self.r3.notch-1 and (self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r2.notch2)) or (self.r3.offset%26==self.r3.notch2-1 and (self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r2.notch2)) and self.r2.now!=3) :
+            if((self.r2.offset)%self.r2.notch==0 or (self.r3.offset%26==self.r3.notch-1 and (self.r2.offset%26==self.r2.notch)) and self.r2.now!=3) :
                 self.r3.shift()
+                print(self.r2.offset)
                 self.r2.now=3
-        elif (((self.r2.offset)%26==self.r2.notch or self.r2.offset%26==self.r2.notch2 or (self.r3.offset%26==self.r3.notch-1 and (self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r2.notch2)) or self.r3.offset%26==self.r3.notch2-1 and (self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r2.notch2)) and self.r2.now!=3) :#and self.r2.now==0):
+        elif (((self.r2.offset)%26==self.r2.notch or (self.r3.offset%26==self.r3.notch-1 and (self.r2.offset%26==self.r2.notch))) and self.r2.now!=3) :#and self.r2.now==0):
             self.r3.shift()
-            self.r2.now=3 
+            self.r2.now=3  
 
         c = self.r3.map_a_to_b2(b)
         d = self.ref.map_a_to_b(c)
@@ -228,14 +223,11 @@ def crib(l ,m):
 
 # Starting the Simulation of the Enigma Machine
 
-Rotor8 = Rotor(rotor8_a,rotor8_b,26,13)
-Rotor7 = Rotor(rotor7_a,rotor7_b,26,13)
-Rotor6 = Rotor(rotor6_a,rotor6_b, 26, 13)
-Rotor5 = Rotor(rotor5_a,rotor5_b, 26,-10)
-Rotor4 = Rotor(rotor4_a,rotor4_b, 10,-10)
-Rotor3 = Rotor(rotor3_a,rotor3_b, 22,-10)
-Rotor2 = Rotor(rotor2_a,rotor2_b, 5,-10)
-Rotor1 = Rotor(rotor1_a,rotor1_b, 17,-10)
+Rotor5 = Rotor(rotor5_a,rotor5_b, 26)
+Rotor4 = Rotor(rotor4_a,rotor4_b, 10)
+Rotor3 = Rotor(rotor3_a,rotor3_b, 22)
+Rotor2 = Rotor(rotor2_a,rotor2_b, 5)
+Rotor1 = Rotor(rotor1_a,rotor1_b, 17)
 
 ReflectorB = Reflector(reflector_a,reflector_b)
 Plugboard = PlugBoard(l.copy(),l.copy())
@@ -255,7 +247,7 @@ while(mm==0):
 
     print("Enter rotor order from left to right: ")
     ss = list(map(int,input().split()))
-    rl = [copy.deepcopy(Rotor1),copy.deepcopy(Rotor2),copy.deepcopy(Rotor3),copy.deepcopy(Rotor4),copy.deepcopy(Rotor5),copy.deepcopy(Rotor6),copy.deepcopy(Rotor7),copy.deepcopy(Rotor8)]
+    rl = [copy.deepcopy(Rotor1),copy.deepcopy(Rotor2),copy.deepcopy(Rotor3),copy.deepcopy(Rotor4),copy.deepcopy(Rotor5)]
         
 
     r1 = rl[ss[0]-1]
