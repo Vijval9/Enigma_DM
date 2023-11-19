@@ -198,7 +198,7 @@ ReflectorB = Reflector(reflector_a,reflector_b)
 Plugboard = PlugBoard(l.copy(),l.copy())
 
 print("Enter rotor order from left to right: ")
-s = list(map(int,input()))
+s = list(map(int,input().split())
 rl = [Rotor1,Rotor2,Rotor3,Rotor4,Rotor5,Rotor6,Rotor7,Rotor8]
     
 
@@ -209,7 +209,7 @@ og = list("abcdefghijklmnopqrstuvwxyz")
 rotors = [r1,r2,r3]
 
 print("Enter Rotor Settings: ")           
-s = list(input())
+s = list(input().split())
 for i in range(len(s)):
     j = og.index(s[i])
     for x in range(j):
@@ -217,7 +217,7 @@ for i in range(len(s)):
 
 
 print("Enter ring settings: ")           
-s = list(input())
+s = list(input().split())
 for i in range(len(s)):
     j = og.index(s[i])
     for x in range(j):
@@ -245,14 +245,14 @@ i = int(input())
 xl = ""
 if(i==1):
     print("Enter text to encrypt: ")
-    s = input()
+    s = input().lower()
     print("Encrypting...")
     print("Encrypted message: ")
     xl = EnigmaMachine.encrypt_text(s)
     print(xl)
 else:
     print("Enter text to decrypt: ")
-    s = input()
+    s = input().lower()
     print("Decrypting...")
     print("Decrypted message: ")
     print(EnigmaMachine.encrypt_text(s))
