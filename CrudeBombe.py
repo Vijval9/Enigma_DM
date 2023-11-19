@@ -239,15 +239,24 @@ cr = input("Enter hint: ").lower()
 mm=0
 
 dictofkeys = {}
-
+count=0
+sta = 0
 
 while(mm==0):
-
-
-
+    ask = ""
+    if(count>0):
+        ask = input("Continue searching ? [y/n]")
+        if ask=="n":
+            break
+    count+=1
+    
     print("Enter rotor order from left to right: ")
     ss = list(map(int,input().split()))
     rl = [copy.deepcopy(Rotor1),copy.deepcopy(Rotor2),copy.deepcopy(Rotor3),copy.deepcopy(Rotor4),copy.deepcopy(Rotor5)]
+    st = ""
+    for i in ss:
+        st+=str(i)
+    dictofkeys[st] = []
         
 
     r1 = rl[ss[0]-1]
@@ -260,6 +269,10 @@ while(mm==0):
     EnigmaMachine = Enigma(rotors[0],rotors[1],rotors[2],ReflectorB,Plugboard)
 
     start = crib(ct,cr)
+    if(len(start)==0):
+        st=1
+        break
+        
 
     matc=0
     s=["a","a","a"]
@@ -300,37 +313,42 @@ while(mm==0):
                        st = ""
                        for i in ss:
                            st+=str(i)
-                       dictofkeys[st] = s
+                       dictofkeys[st].append(s)
                        print("one key found: ",s)
-                       search = input("continue to search ? [y/n]: ")
-                       if((a==25 and b==25 and c==25) or search=="n"):
+                       ask = input("continue to search ? [y/n]: ")
+                       if((a==25 and b==25 and c==25) or ask=="n"):
                            xy=1
                            break
                 if(xy==1):
-                    if((a==25 and b==25 and c==25) or search=="n"):
+                    if((a==25 and b==25 and c==25) or ask=="n"):
                         bb=1
                         break
             if(bb==1):
-                if((a==25 and b==25 and c==25) or search=="n"):
+                if((a==25 and b==25 and c==25) or ask=="n"):
                     aa=1
                     break
         if aa==1:
-            if((a==25 and b==25 and c==25) or search=="n"):
+            if((a==25 and b==25 and c==25) or ask=="n"):
                 matc=1
                 break
-    if((matc==1 and a==25 and b==25 and c==25) or search=="n"):
+    if(matc==1 or (a==25 and b==25 and c==25 and len(dictofkeys)!=0) or ask=="n"):
         mm=1
-        print("Cracked.")
-        print("rotor settings: ",s)
-        print("Rotor order: ",ss[0],ss[1],ss[2])
+        if(matc==1):
+            print("Cracked.")
+            print("rotor settings: ",s)
+            print("Rotor order: ",ss[0],ss[1],ss[2])
         break
     else:
         print("No more solutions")
 
+if(sta==1):
+    print("No cribs found")
 print("Final possible solutions : ")
+if(len(dictofkeys)==0):
+    print("No solutions")
 for i in dictofkeys:
-    print(f"{i} : {dictofkeys[i]}")
+    for j in dictofkeys[i]:
+        print(f"{i} : {j}")
 
 
         
-
