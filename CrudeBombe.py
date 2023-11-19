@@ -147,12 +147,12 @@ class Enigma():
     
         b = self.r2.map_a_to_b2(a)
         if(self.r2.notch==26 and self.r2.offset!=0):
-            if(((self.r2.offset)%self.r2.notch==0 or self.r2.offset%26==self.r2.notch2 or (self.r3.offset%26==self.r3.notch-1) or self.r3.offset%26==self.r3.notch2-1) and self.r2.now!=3) :
+            if((self.r2.offset)%self.r2.notch==0 or self.r2.offset%26==self.r2.notch2 or (self.r3.offset%26==self.r3.notch-1 and (self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r2.notch2)) or (self.r3.offset%26==self.r3.notch2-1 and (self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r2.notch2)) and self.r2.now!=3) :
                 self.r3.shift()
                 self.r2.now=3
-        elif (((self.r2.offset)%26==self.r2.notch or self.r2.offset%26==self.r2.notch2 or (self.r3.offset%26==self.r3.notch-1) or self.r3.offset%26==self.r3.notch2-1) and self.r2.now!=3) :#and self.r2.now==0):
+        elif (((self.r2.offset)%26==self.r2.notch or self.r2.offset%26==self.r2.notch2 or (self.r3.offset%26==self.r3.notch-1 and (self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r2.notch2)) or self.r3.offset%26==self.r3.notch2-1 and (self.r2.offset%26==self.r2.notch or self.r2.offset%26==self.r2.notch2)) and self.r2.now!=3) :#and self.r2.now==0):
             self.r3.shift()
-            self.r2.now=3   
+            self.r2.now=3 
 
         c = self.r3.map_a_to_b2(b)
         d = self.ref.map_a_to_b(c)
