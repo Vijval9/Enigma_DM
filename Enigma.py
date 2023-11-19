@@ -198,7 +198,7 @@ ReflectorB = Reflector(reflector_a,reflector_b)
 Plugboard = PlugBoard(l.copy(),l.copy())
 
 print("Enter rotor order from left to right: ")
-s = list(map(int,input().split())
+s = list(map(int,input().split()))
 rl = [Rotor1,Rotor2,Rotor3,Rotor4,Rotor5,Rotor6,Rotor7,Rotor8]
     
 
