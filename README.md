@@ -22,7 +22,8 @@ c) PlugBoard
 d) EnigmaMachine
 
 Rotor configurations:
-- Rotor 1: ABCDEFGHIJKLMNOPQRSTUVWXYZ, Turnover: Q
+- Rotor 1: ABCDEFGHIJKLMNOPQRSTUVWXYZ,
+  Turnover: Q
    -Configuration: EKMFLGDQVZNTOWYHXUSPAIBRCJ
 
 - Rotor 2: ABCDEFGHIJKLMNOPQRSTUVWXYZ, Turnover: E
