@@ -32,13 +32,16 @@ class Rotor():
         self.roffset=0
         self.now = 0
         
+    # mapping of the faces of the rotor in forward direction
     def map_a_to_b2(self, x):
         x = self.face_a[(self.og_list.index(x)-self.roffset)%26]
         return self.og_list[(self.og_list.index(self.face_b[self.face_a.index(x)])-self.offset+self.roffset)%26]
     
+    # mapping of the faces of the rotor in reverse direction
     def map_b_to_a2(self, x):
         return self.og_list[(self.og_list.index(self.face_a[self.face_b.index(self.og_list[(self.og_list.index(x)+self.offset-self.roffset)%26])])-self.offset+self.roffset)%26]
     
+    # shifting the rotor
     def shift(self):
         st_b = self.face_b[0]
         st_a = self.face_a[0]
@@ -56,9 +59,11 @@ class Rotor():
         self.offset+=1
         self.now=3
         
+    # shifting the ring
     def shift_ring(self):
         self.roffset+=1
-        
+
+    # initial shift to set the value 
     def shift_initial(self):
         st_b = self.face_b[0]
         st_a = self.face_a[0]
@@ -84,9 +89,11 @@ class Reflector():
         self.face_a = a
         self.face_b = b
         
+    # forward mapping of the reflector
     def map_a_to_b(self, x):
         return self.face_b[self.face_a.index(x)]
     
+    # reverse mapping of the reflector
     def map_b_to_a(self, x):
         return self.face_a[self.face_b.index(x)]
     
@@ -97,9 +104,11 @@ class PlugBoard():
         self.up = u
         self.low = l
         
+    # mapping the foward direction of the plugboard
     def map_u_to_l(self, x):
         return self.low[self.up.index(x)]
     
+    # mapping the reverse direction of the plugboar
     def map_l_to_u(self, x):
         return self.up[self.low.index(x)]
 
@@ -116,12 +125,15 @@ class Enigma():
         
     def encrypt_letter(self,s):
         s1 =s
+        # chanfing the letter by the plugboard
         if s in self.plg.up:
            s1 = self.plg.map_u_to_l(s)
         elif s in self.plg.low:
             s1 = self.plg.map_l_to_u(s)
+        # shifting the rotor
         self.r1.shift()
         a = self.r1.map_a_to_b2(s1)
+
         if(self.r1.notch==26 and self.r1.offset!=0):
             if(((self.r1.offset)%self.r1.notch==0 or self.r2.offset%26 == self.r2.notch-1)) : #(self.r1.offset%26==self.r2.notch) ):# and self.r1.now!=3: #and self.r1.now==0)
                 self.r2.shift()
@@ -139,7 +151,7 @@ class Enigma():
                 self.r3.shift()
                 print(self.r2.offset)
                 self.r2.now=3
-        elif (((self.r2.offset)%26==self.r2.notch or (self.r3.offset%26==self.r3.notch-1 and (self.r2.offset%26==self.r2.notch))) and self.r2.now!=3) :#and self.r2.now==0):
+        elif (((self.r2.offset)%26==self.r2.notch or (self.r3.offset%26==self.r3.notch-1 and (self.r2.offset%26==self.r2.notch))) and self.r2.now!=3) :
             self.r3.shift()
             self.r2.now=3   
 
@@ -158,19 +170,13 @@ class Enigma():
         
         return a1
     
-    def encrypt_string(self, s):
-        l = list(s)
-        final = ""
-        for i in l:
-            final+=self.encrypt_letter(i)  
-        return final
-    
+    # encryptying the text
     def encrypt_text(self, t):
         l = list(t)
         final = ""
         for i in l:
             if(i!=" "):
-                final+=self.encrypt_string(i)
+                final+=self.encrypt_letter(i)
             else:
                 final+=i
                 
@@ -182,6 +188,7 @@ class Enigma():
 
 # Starting the Simulation of the Enigma Machine
 
+# initialising the rotors, reflectors and the plugbo
 Rotor5 = Rotor(rotor5_a,rotor5_b, 26)
 Rotor4 = Rotor(rotor4_a,rotor4_b, 10)
 Rotor3 = Rotor(rotor3_a,rotor3_b, 22)
@@ -191,62 +198,48 @@ Rotor1 = Rotor(rotor1_a,rotor1_b, 17)
 ReflectorB = Reflector(reflector_a,reflector_b)
 Plugboard = PlugBoard(l.copy(),l.copy())
 
-print("Enter rotor order from left to right: ")
+print("Enter rotor order from left to right: ",end="")
 s = list(map(int,input().split()))
 rl = [Rotor1,Rotor2,Rotor3,Rotor4,Rotor5]
     
-
+# picking the rotors entered by the user
 r1 = rl[s[0]-1]
 r2 = rl[s[1]-1]
 r3 = rl[s[2]-1]
 og = list("abcdefghijklmnopqrstuvwxyz")
 rotors = [r1,r2,r3]
 
-print("Enter Rotor Settings: ")           
-s = list(input().split())
+# shifting the rotors to the postion set by the user
+print("Enter Rotor Settings: ",end="")           
+s = [i.lower() for i in input().split()]
 for i in range(len(s)):
     j = og.index(s[i])
     for x in range(j):
         rotors[i].shift_initial()
 
-
-print("Enter ring settings: ")           
-s = list(input().split())
+# shifting the ring
+print("Enter ring settings: ",end ="")           
+s = [i.lower() for i in input().split()]
 for i in range(len(s)):
     j = og.index(s[i])
     for x in range(j):
         rotors[i].shift_ring()
 
-
-print("Enter plugboard configuration as pairs of letters. Press nop if do not want plugboard: ")
+# setting the plugboard
+print("Enter plugboard configuration as pairs of letters. Press nop if do not want plugboard: ",end="")
 s= input()
 if s.lower()!="nop":
     l = s.split()
-    pu = [x[0] for x in l]
-    pl = [x[1] for x in l]
+    pu = [x[0].lower() for x in l]
+    pl = [x[1].lower() for x in l]
     Plugboard = PlugBoard(pu,pl)
     
     
-
+# initialising the enigma machine
 EnigmaMachine = Enigma(r1,r2,r3,ReflectorB,Plugboard)
 print("Enigma Machine initialised...")
-
-print("Choose: ")
-print("1. Encrypt")
-print("2. Decrypt")
-i = int(input())
-
-xl = ""
-if(i==1):
-    print("Enter text to encrypt: ")
-    s = input().lower()
-    print("Encrypting...")
-    print("Encrypted message: ")
-    xl = EnigmaMachine.encrypt_text(s)
-    print(xl)
-else:
-    print("Enter text to decrypt: ")
-    s = input().lower()
-    print("Decrypting...")
-    print("Decrypted message: ")
-    print(EnigmaMachine.encrypt_text(s))
+print("Enter text to encrypt: ")
+s = input().lower()
+print("Encrypting...")
+print("Encrypted message: ")
+print(EnigmaMachine.encrypt_text(s))
